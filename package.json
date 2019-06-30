@@ -1,0 +1,21 @@
+{
+  "name": "node-book-shop-20",
+  "version": "2.0.1",
+  "description": "Node app build using the MVC architecture with ExpressJS as my NodeJS framework & EJS as my view engine...",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "start-server": "node app.js"
+  },
+  "author": "BiggaHD",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3"
+  }
+}
