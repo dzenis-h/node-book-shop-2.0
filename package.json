@@ -1,7 +1,7 @@
 {
   "name": "node-book-shop-20",
-  "version": "2.0.1",
-  "description": "Node app build using the MVC architecture with ExpressJS as my NodeJS framework & EJS as my view engine...",
+  "version": "2.1.0",
+  "description": "Node app build using the MVC architecture with ExpressJS as my NodeJS framework, EJS as my view engine and MongoDB as my database",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -16,6 +16,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "mongodb": "^3.1.6",
+    "mongoose": "^5.2.17"
   }
 }
