@@ -1,5 +1,5 @@
 > ### Node Book Shop _2.0_
-> _`NodeJS`_ app build using the _**MVC architecture**_ with _`ExpressJS`_ as my _`NodeJS`_ framework, _`EJS`_ as my view engine &amp; _`MongoDB`_ as my database.
+> _`NodeJS`_ app build using the _**MVC architecture**_ with _`ExpressJS`_ as my _NodeJS framework_, _`EJS`_ as my view engine &amp; _`MongoDB`_ as my database.
 
 > #### Instructions:  
 > Clone this repo with `git clone`  
