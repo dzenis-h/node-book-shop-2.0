@@ -11,7 +11,7 @@ const flash = require("connect-flash");
 const errorController = require("./controllers/error");
 const User = require("./models/user");
 
-// Your MongoDB URi goes here ...
+// Your MongoDB URI goes here ...
 const MONGODB_URI = "";
 
 const app = express();
