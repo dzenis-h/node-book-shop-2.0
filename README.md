@@ -7,3 +7,5 @@
 > Run `npm install` to install all of the _dependencies_  
 > Additionally you should install `nodemon` with `npm i nodemon` for better _dev environment_  
 > After that just run `npm start` to start up `nodemon` and see it in action.  
+![Cover image](https://github.com/BiggaHD/node-book-shop-2.0/blob/master/Final%20product!.jpg)
+
