@@ -56,7 +56,7 @@ form {
 }
 
 .main-header__item {
-  margin: 0 1rem;
+  margin: 0 1.25rem;
   padding: 0;
 }
 
@@ -66,8 +66,25 @@ form {
   background: transparent;
   border: none;
   text-decoration: none;
-  color: white;
+  color: #292929;
   cursor: pointer;
+  font-weight: bold;
+  padding: 0.5rem;
+  border: 2px solid transparent;
+}
+
+.admin a {
+  border: 1px solid transparent;
+  color: #292929;
+  text-decoration: none;
+  font: inherit;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  color: #f8df00;
+  cursor: pointer;
+  font-weight: bold;
+  text-shadow: 1px 1px grey;
 }
 
 .main-header__item a:hover,
@@ -75,7 +92,10 @@ form {
 .main-header__item a.active,
 .main-header__item button:hover,
 .main-header__item button:active {
-  color: #ffeb3b;
+  background: #f8df00;
+  border-color: #292929;
+  color: #292929;
+  border: 2px solid #00695c;
 }
 
 .mobile-nav {
@@ -208,28 +228,30 @@ form {
   padding: 0.25rem 1rem;
   text-decoration: none;
   font: inherit;
-  border: 1px solid #00695c;
-  color: #00695c;
+  border: 2px solid #237de3;
+  color: #237de3;
   background: white;
   border-radius: 3px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #00695c;
-  color: white;
+  background-color: #f8df00;
+  border: 2px solid #00695c;
+  color: #292929;
 }
 
 .btn.danger {
-  color: red;
-  border-color: red;
+  color: firebrick;
+  border-color: rgb(182, 26, 26);
 }
 
 .btn.danger:hover,
 .btn.danger:active {
-  background: red;
-  color: white;
+  background: firebrick;
+  color: floralwhite;
 }
 
 .user-message {

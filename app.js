@@ -1,22 +1,26 @@
 const path = require("path");
-
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
+const dotenv = require("dotenv");
 
+const connectDB = require("./config/db");
 const errorController = require("./controllers/error");
 const User = require("./models/user");
 
-// Your MongoDB URI goes here ...
-const MONGODB_URI = "";
-
 const app = express();
+
+// Load env vars
+dotenv.config({ path: "./config/config.env" });
+
+// Connect to database
+connectDB();
+
 const store = new MongoDBStore({
-  uri: MONGODB_URI,
+  uri: process.env.MONGO_URI || MONGO_URI,
   collection: "sessions"
 });
 const csrfProtection = csrf();
@@ -35,7 +39,7 @@ app.use(
     secret: "secretSession",
     resave: false,
     saveUninitialized: false,
-    store: store
+    store
   })
 );
 app.use(csrfProtection);
@@ -48,7 +52,6 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  // throw new Error('Sync Dummy');
   if (!req.session.user) {
     return next();
   }
@@ -81,11 +84,9 @@ app.use((error, req, res, next) => {
   });
 });
 
-mongoose
-  .connect(MONGODB_URI)
-  .then(result => {
-    app.listen(3000);
-  })
-  .catch(err => {
-    console.log(err);
-  });
+const PORT = process.env.PORT || 5000;
+
+app.listen(
+  PORT,
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+);
