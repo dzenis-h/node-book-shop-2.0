@@ -10,6 +10,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const errorController = require("./controllers/error");
 const User = require("./models/user");
+const uploadIt = require("./middleware/upload").uploadIt;
 
 const app = express();
 
@@ -25,6 +26,28 @@ const store = new MongoDBStore({
 });
 const csrfProtection = csrf();
 
+// -----------------------------
+// const fileStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "images");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, new Date().toISOString() + "-" + file.originalname);
+//   }
+// });
+
+// const fileFilter = (req, file, cb) => {
+//   if (
+//     file.mimetype === "image/png" ||
+//     file.mimetype === "image/jpg" ||
+//     file.mimetype === "image/jpeg"
+//   ) {
+//     cb(null, true);
+//   } else {
+//     cb(null, false);
+//   }
+// };
+// -----------------------------
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -34,6 +57,11 @@ const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(uploadIt.single("image"));
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/admin/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.use(
   session({
     secret: "secretSession",
@@ -44,12 +72,6 @@ app.use(
 );
 app.use(csrfProtection);
 app.use(flash());
-
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
 
 app.use((req, res, next) => {
   if (!req.session.user) {
@@ -66,6 +88,12 @@ app.use((req, res, next) => {
     .catch(err => {
       next(new Error(err));
     });
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 app.use("/admin", adminRoutes);

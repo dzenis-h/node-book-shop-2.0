@@ -75,16 +75,16 @@ form {
 
 .admin a {
   border: 1px solid transparent;
-  color: #292929;
   text-decoration: none;
   font: inherit;
   background: transparent;
   border: none;
   text-decoration: none;
-  color: #f8df00;
+  color: #ffffff;
   cursor: pointer;
   font-weight: bold;
-  text-shadow: 1px 1px grey;
+  font-style: italic;
+  text-shadow: 1px 1px 2px rgb(102, 102, 102);
 }
 
 .main-header__item a:hover,
@@ -281,5 +281,12 @@ form {
 
   .user-message {
     width: 30rem;
+  }
+}
+
+@media (max-width: 964px) {
+  .main-header__item a,
+  .main-header__item button {
+    padding: 0rem;
   }
 }
