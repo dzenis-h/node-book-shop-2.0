@@ -271,6 +271,14 @@ form {
   color: red;
 }
 
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: goldenrod;
+  text-shadow: 1px 2px 2px grey;
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;

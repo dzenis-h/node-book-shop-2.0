@@ -1,6 +1,8 @@
 const multer = require("multer");
-const uuid = require("uuid/v1");
+const { v1: uuidv1 } = require("uuid");
+
 const fs = require("fs");
+const path = require("path");
 
 const MIME_TYPE = {
   "image/png": "png",
@@ -16,7 +18,7 @@ const uploadIt = multer({
     },
     filename: (req, file, cb) => {
       const ext = MIME_TYPE[file.mimetype];
-      const fileName = `${uuid()}.${ext}`;
+      const fileName = `${uuidv1()}.${ext}`;
       cb(null, fileName);
     }
   }),
@@ -29,7 +31,7 @@ const uploadIt = multer({
 
 const deleteFile = filePath => {
   try {
-    fs.unlink(filePath, err => {
+    fs.unlink(path.join(__dirname, "..", filePath), err => {
       console.log(err);
     });
   } catch (err) {

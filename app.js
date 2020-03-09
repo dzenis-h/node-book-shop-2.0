@@ -6,7 +6,8 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
 const dotenv = require("dotenv");
-
+const shopController = require("./controllers/shop");
+const isAuth = require("./middleware/is-auth");
 const connectDB = require("./config/db");
 const errorController = require("./controllers/error");
 const User = require("./models/user");
@@ -68,7 +69,7 @@ app.use(
     store
   })
 );
-app.use(csrfProtection);
+
 app.use(flash());
 
 app.use((req, res, next) => {
@@ -93,6 +94,9 @@ app.use((req, res, next) => {
     });
 });
 
+// This must me outsourced becasue we don't want the CSRF token for this route
+app.post("/create-order", isAuth, shopController.postOrder);
+
 app.use(csrfProtection);
 app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
@@ -109,6 +113,7 @@ app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
   let isLoggedIn = !req.session ? false : req.session.isLoggedIn;
+  console.log(error);
   res.status(500).render("500", {
     pageTitle: "Error!",
     path: "/500",
