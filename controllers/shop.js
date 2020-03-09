@@ -1,20 +1,21 @@
 const Product = require("../models/product");
 const Order = require("../models/order");
 
-exports.getProducts = (req, res, next) => {
-  Product.find()
-    .then(products => {
-      res.render("shop/product-list", {
-        prods: products,
-        pageTitle: "All Products",
-        path: "/products"
-      });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+exports.getProducts = async (req, res, next) => {
+  try {
+    const { data, pagination, count } = res.advancedResults;
+    res.render("shop/product-list", {
+      prods: data,
+      pageTitle: "All Products",
+      path: "/products",
+      pagination,
+      count
     });
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(err);
+  }
 };
 
 exports.getProduct = (req, res, next) => {
@@ -34,20 +35,21 @@ exports.getProduct = (req, res, next) => {
     });
 };
 
-exports.getIndex = (req, res, next) => {
-  Product.find()
-    .then(products => {
-      res.render("shop/index", {
-        prods: products,
-        pageTitle: "Shop",
-        path: "/"
-      });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+exports.getIndex = async (req, res, next) => {
+  try {
+    const { data, pagination, count } = res.advancedResults;
+    res.render("shop/index", {
+      prods: data,
+      pageTitle: "Shop",
+      path: "/",
+      pagination,
+      count
     });
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  }
 };
 
 exports.getCart = (req, res, next) => {

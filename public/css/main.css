@@ -93,7 +93,6 @@ form {
 .main-header__item button:hover,
 .main-header__item button:active {
   background: #f8df00;
-  border-color: #292929;
   color: #292929;
   border: 2px solid #00695c;
 }
@@ -146,9 +145,11 @@ form {
 .mobile-nav__item a.active,
 .mobile-nav__item button:hover,
 .mobile-nav__item button:active {
-  background: #00695c;
-  color: white;
+  background: #237de4;
+  color: #f8df00;
   border-radius: 3px;
+  border: 2px solid #00695c;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.26);
 }
 
 #side-menu-toggle {
@@ -168,7 +169,7 @@ form {
 #side-menu-toggle:active,
 #side-menu-toggle:hover {
   color: #ffeb3b;
-  border-color: #ffeb3b;
+  border: 2px solid #ffeb3b;
 }
 
 .backdrop {
@@ -282,6 +283,29 @@ form {
   .user-message {
     width: 30rem;
   }
+}
+
+.pagination {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.pagination a {
+  text-decoration: none;
+  color: #237de4;
+  padding: 0.5rem;
+  border: 1px solid #237de4;
+  margin: 0 1rem;
+  font-weight: bold;
+  border: 2px solid transparent;
+}
+
+.pagination a:hover,
+.pagination a:active,
+.pagination a.active {
+  background: #237de4;
+  color: #f8df00;
+  border: 2px inset #f3de1eaf;
 }
 
 @media (max-width: 964px) {

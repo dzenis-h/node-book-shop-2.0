@@ -3,24 +3,29 @@ const { body } = require("express-validator/check");
 
 const adminController = require("../controllers/admin");
 const isAuth = require("../middleware/is-auth");
+const Product = require("../models/product");
+const advancedResults = require("../middleware/advancedResults");
 
 const router = express.Router();
 
-// /admin/add-product => GET
 router.get("/add-product", isAuth, adminController.getAddProduct);
 
-router.get("/products", isAuth, adminController.getProducts);
+router.get(
+  "/products",
+  isAuth,
+  advancedResults(Product, true),
+  adminController.getProducts
+);
 
-// /admin/add-product => POST
 router.post(
   "/add-product",
   [
-    body("title")
+    body("title", "The title must be at least 3 characters long.")
       .isString()
       .isLength({ min: 3 })
       .trim(),
-    body("price").isFloat(),
-    body("description")
+    body("price", "The price must be a number.").isFloat(),
+    body("description", "The description must be between 5 and 400 characters.")
       .isLength({ min: 5, max: 400 })
       .trim()
   ],
@@ -33,12 +38,12 @@ router.get("/edit-product/:productId", isAuth, adminController.getEditProduct);
 router.post(
   "/edit-product",
   [
-    body("title")
+    body("title", "The title must be at least 3 characters long.")
       .isString()
       .isLength({ min: 3 })
       .trim(),
-    body("price").isFloat(),
-    body("description")
+    body("price", "The price must be a number.").isFloat(),
+    body("description", "The description must be between 5 and 400 characters.")
       .isLength({ min: 5, max: 400 })
       .trim()
   ],
