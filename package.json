@@ -1,14 +1,14 @@
 {
   "name": "node-book-shop-20",
-  "version": "2.3.1",
+  "author": "Dzenis H.",
   "description": "Node app build using the MVC architecture with ExpressJS as my NodeJS framework, EJS as my view engine and MongoDB as my database",
+  "version": "2.4.0",
+  "license": "MIT",
   "main": "app.js",
   "scripts": {
     "start": "NODE_ENV=production node app.js",
     "dev": "nodemon app.js"
   },
-  "author": "Dzenis-H",
-  "license": "MIT",
   "devDependencies": {
     "@types/uuid": "^7.0.0",
     "nodemon": "^1.18.3"
@@ -28,6 +28,7 @@
     "mongodb": "^3.1.6",
     "mongoose": "^5.2.17",
     "multer": "^1.4.2",
+    "pdfkit": "^0.11.0",
     "stripe": "^8.29.0",
     "uuid": "^7.0.2"
   }

@@ -12,7 +12,7 @@ exports.getProducts = (req, res, next) => {
       pageTitle: "Admin Products",
       path: "/admin/products",
       pagination,
-      count
+      count,
     });
   } catch (err) {
     const error = new Error(err);
@@ -28,11 +28,11 @@ exports.getAddProduct = (req, res, next) => {
     editing: false,
     hasError: false,
     errorMessage: null,
-    validationErrors: []
+    validationErrors: [],
   });
 };
 
-exports.postAddProduct = (req, res, next) => {
+exports.postAddProduct = async (req, res, next) => {
   const { title, price, description } = req.body;
   const image = req.file;
 
@@ -45,16 +45,15 @@ exports.postAddProduct = (req, res, next) => {
       product: {
         title,
         price,
-        description
+        description,
       },
       errorMessage: "Attached file is not an image.",
-      validationErrors: []
+      validationErrors: [],
     });
   }
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors.array());
     return res.status(422).render("admin/add_edit-product", {
       pageTitle: "Add Product",
       path: "/admin/add-product",
@@ -63,10 +62,10 @@ exports.postAddProduct = (req, res, next) => {
       product: {
         title,
         price,
-        description
+        description,
       },
       errorMessage: errors.array()[0].msg,
-      validationErrors: errors.array()
+      validationErrors: errors.array(),
     });
   }
 
@@ -79,49 +78,46 @@ exports.postAddProduct = (req, res, next) => {
     price,
     description,
     imageUrl,
-    userId: req.user
+    userId: req.user,
   });
-  product
-    .save()
-    .then(result => {
-      res.redirect("/admin/products");
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
+  try {
+    await product.save();
+    res.redirect("/admin/products");
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  }
 };
 
-exports.getEditProduct = (req, res, next) => {
+exports.getEditProduct = async (req, res, next) => {
   const editMode = req.query.edit;
   if (!editMode) {
     return res.redirect("/");
   }
-  const prodId = req.params.productId;
-  Product.findById(prodId)
-    .then(product => {
-      if (!product) {
-        return res.redirect("/");
-      }
-      res.render("admin/add_edit-product", {
-        pageTitle: "Edit Product",
-        path: "/admin/edit-product",
-        editing: editMode,
-        product,
-        hasError: false,
-        errorMessage: null,
-        validationErrors: []
-      });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+  const { productId } = req.params;
+  try {
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.redirect("/");
+    }
+    res.render("admin/add_edit-product", {
+      pageTitle: "Edit Product",
+      path: "/admin/edit-product",
+      editing: editMode,
+      product,
+      hasError: false,
+      errorMessage: null,
+      validationErrors: [],
     });
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  }
 };
 
-exports.postEditProduct = (req, res, next) => {
+exports.postEditProduct = async (req, res, next) => {
   const { productId, title, price, description } = req.body;
   const image = req.file;
 
@@ -137,55 +133,47 @@ exports.postEditProduct = (req, res, next) => {
         title,
         price,
         description,
-        _id: productId
+        _id: productId,
       },
       errorMessage: errors.array()[0].msg,
-      validationErrors: errors.array()
+      validationErrors: errors.array(),
     });
   }
-
-  Product.findById(productId)
-    .then(product => {
-      if (product.userId.toString() !== req.user._id.toString()) {
-        return res.redirect("/");
-      }
-      product.title = title;
-      product.price = price;
-      product.description = description;
-      if (image) {
-        deleteFile.deleteFile(product.imageUrl);
-        product.imageUrl = image.path;
-      }
-      return product.save().then(result => {
-        res.redirect("/admin/products");
-      });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
+  try {
+    const product = await Product.findById(productId);
+    if (product.userId.toString() !== req.user._id.toString()) {
+      return res.redirect("/");
+    }
+    product.title = title;
+    product.price = price;
+    product.description = description;
+    if (image) {
+      deleteFile.deleteFile(product.imageUrl);
+      product.imageUrl = image.path;
+    }
+    await product.save();
+    res.redirect("/admin/products");
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  }
 };
 
-exports.postDeleteProduct = (req, res, next) => {
+exports.postDeleteProduct = async (req, res, next) => {
   const { prodId } = req.params;
-  Product.findById(prodId)
-    .then(product => {
-      if (!product) {
-        return next(new Error("Product not found."));
-      }
-      deleteFile(product.imageUrl);
-      return Product.deleteOne({ _id: prodId, userId: req.user._id });
-    })
-    .then(() => {
-      res
-        .status(200)
-        .json({ message: "Product has been successfully deleted." });
-    })
-    .catch(err => {
-      res.status(500).json({ message: "Product couldn't be deleted." });
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
+  try {
+    const product = await Product.findById(prodId);
+    if (!product) {
+      return next(new Error("Product not found."));
+    }
+    deleteFile(product.imageUrl);
+    await Product.deleteOne({ _id: prodId, userId: req.user._id });
+    res.status(200).json({ message: "Product has been successfully deleted." });
+  } catch (err) {
+    res.status(500).json({ message: "Product couldn't be deleted." });
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  }
 };

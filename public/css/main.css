@@ -271,6 +271,45 @@ form {
   color: red;
 }
 
+#user-message--success {
+  margin: auto;
+  padding: 0.5rem;
+  text-align: center;
+  border-color: green;
+  background: rgb(175, 224, 147);
+  color: #000000;
+  -moz-animation: cssAnimation 0s ease-in 5s forwards;
+  /* Firefox */
+  -webkit-animation: cssAnimation 0s ease-in 5s forwards;
+  /* Safari and Chrome */
+  -o-animation: cssAnimation 0s ease-in 5s forwards;
+  /* Opera */
+  animation: cssAnimation 0s ease-in 5s forwards;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+@keyframes cssAnimation {
+  to {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    display: none;
+    padding: 0rem;
+    margin: 0;
+  }
+}
+@-webkit-keyframes cssAnimation {
+  to {
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    display: none;
+    padding: 0.5rem;
+    margin: 0;
+  }
+}
+
 .info {
   display: flex;
   justify-content: center;
@@ -319,6 +358,7 @@ form {
 @media (max-width: 964px) {
   .main-header__item a,
   .main-header__item button {
-    padding: 0rem;
+    padding: 0.1rem;
+    padding-right: 0.2rem;
   }
 }

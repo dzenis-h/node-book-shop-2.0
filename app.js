@@ -23,32 +23,10 @@ connectDB();
 
 const store = new MongoDBStore({
   uri: process.env.MONGO_URI || MONGO_URI,
-  collection: "sessions"
+  collection: "sessions",
 });
 const csrfProtection = csrf();
 
-// -----------------------------
-// const fileStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "images");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, new Date().toISOString() + "-" + file.originalname);
-//   }
-// });
-
-// const fileFilter = (req, file, cb) => {
-//   if (
-//     file.mimetype === "image/png" ||
-//     file.mimetype === "image/jpg" ||
-//     file.mimetype === "image/jpeg"
-//   ) {
-//     cb(null, true);
-//   } else {
-//     cb(null, false);
-//   }
-// };
-// -----------------------------
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -66,7 +44,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store
+    store,
   })
 );
 
@@ -77,21 +55,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   if (!req.session.user) {
     return next();
   }
-  User.findById(req.session.user._id)
-    .then(user => {
-      if (!user) {
-        return next();
-      }
-      req.user = user;
-      next();
-    })
-    .catch(err => {
-      next(new Error(err));
-    });
+  try {
+    const user = await User.findById(req.session.user._id);
+    if (!user) {
+      return next();
+    }
+    req.user = user;
+    next();
+  } catch (err) {
+    next(new Error(err));
+  }
 });
 
 // This must me outsourced becasue we don't want the CSRF token for this route
@@ -111,13 +88,13 @@ app.get("/500", errorController.get500);
 
 app.use(errorController.get404);
 
-app.use((error, req, res, next) => {
+app.use((err, req, res, next) => {
   let isLoggedIn = !req.session ? false : req.session.isLoggedIn;
-  console.log(error);
+  if (err) console.log(err);
   res.status(500).render("500", {
     pageTitle: "Error!",
     path: "/500",
-    isAuthenticated: isLoggedIn
+    isAuthenticated: isLoggedIn,
   });
 });
 

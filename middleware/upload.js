@@ -7,7 +7,7 @@ const path = require("path");
 const MIME_TYPE = {
   "image/png": "png",
   "image/jpeg": "jpeg",
-  "image/jpg": "jpg"
+  "image/jpg": "jpg",
 };
 
 const uploadIt = multer({
@@ -20,22 +20,22 @@ const uploadIt = multer({
       const ext = MIME_TYPE[file.mimetype];
       const fileName = `${uuidv1()}.${ext}`;
       cb(null, fileName);
-    }
+    },
   }),
   fileFilter: (req, file, cb) => {
     const isValid = !!MIME_TYPE[file.mimetype];
     const error = isValid ? null : new Error("Could NOT upload the file.");
     cb(error, isValid);
-  }
+  },
 });
 
-const deleteFile = filePath => {
+const deleteFile = (filePath) => {
   try {
-    fs.unlink(path.join(__dirname, "..", filePath), err => {
-      console.log(err);
+    fs.unlink(path.join(__dirname, "..", filePath), (err) => {
+      if (err) console.log(err);
     });
   } catch (err) {
-    console.log(err);
+    if (err) console.log(err);
   }
 };
 

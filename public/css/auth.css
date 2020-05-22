@@ -4,3 +4,28 @@
   margin: auto;
   display: block;
 }
+
+#reset a {
+  display: block;
+  padding: 1rem;
+  margin: 1rem !important;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: rgb(140, 172, 141); /* Green */
+  border: none;
+  padding: 0.5rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 0.77em;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  border: 2px solid #c58186;
+  transition-duration: 0.4s;
+}
+
+#reset a:hover {
+  background-color: #b34c4c; /* Green */
+  color: white;
+}

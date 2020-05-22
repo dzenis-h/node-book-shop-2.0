@@ -4,8 +4,10 @@
 
 <body>
     <%- include('../includes/navigation.ejs') %>
-
     <main>
+        <% if (success) { %>
+            <div id="user-message--success"><%= success %></div>
+        <% } %>
         <% if (prods.length > 0) { %>
             <div class="grid">
                 <% for (let product of prods) { %>

@@ -16,11 +16,11 @@ router.post(
     body("email")
       .isEmail()
       .withMessage("Please enter a valid email address.")
-      .normalizeEmail(),
+      .normalizeEmail({ gmail_remove_dots: false }),
     body("password", "Password has to be valid.")
       .isLength({ min: 5 })
       .isAlphanumeric()
-      .trim()
+      .trim(),
   ],
   authController.postLogin
 );
@@ -31,16 +31,15 @@ router.post(
     check("email")
       .isEmail()
       .withMessage("Please enter a valid email.")
-      .custom((value, { req }) => {
-        return User.findOne({ email: value }).then(userDoc => {
-          if (userDoc) {
-            return Promise.reject(
-              "E-Mail exists already, please pick a different one."
-            );
-          }
-        });
+      .custom(async (value, { req }) => {
+        const userDoc = await User.findOne({ email: value });
+        if (userDoc) {
+          return Promise.reject(
+            "E-Mail exists already, please pick a different one."
+          );
+        }
       })
-      .normalizeEmail(),
+      .normalizeEmail({ gmail_remove_dots: false }),
     body(
       "password",
       "Please enter a password with only numbers and text and at least 5 characters."
@@ -55,11 +54,19 @@ router.post(
           throw new Error("Passwords have to match!");
         }
         return true;
-      })
+      }),
   ],
   authController.postSignup
 );
 
 router.post("/logout", authController.postLogout);
+
+router.get("/reset", authController.getReset);
+
+router.post("/reset", authController.postReset);
+
+router.get("/reset/:token", authController.getNewPassword);
+
+router.post("/new-password", authController.postNewPassword);
 
 module.exports = router;

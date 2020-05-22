@@ -3,8 +3,9 @@
   margin: 0;
   padding: 0;
   margin: auto;
-  width: 40rem;
+  width: 55rem;
   max-width: 90%;
+  align-items: center;
 }
 
 .cart__item {
@@ -23,3 +24,14 @@
   margin: 0;
 }
 
+.cart__item h2 {
+  flex: auto;
+  padding-right: 1rem;
+  color: #237de4;
+  text-shadow: 1px 1px 2px #444;
+  text-align: end;
+}
+
+.cart__item span {
+  color: firebrick;
+}
