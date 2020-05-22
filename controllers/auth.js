@@ -185,7 +185,7 @@ exports.postReset = async (req, res, next) => {
         html: `
             <section style="background-color: black; color: white; border: 2px solid firebrick;">
             <h4>Did you requested a password reset?</h4>
-            <p>If YES, please click this <a href="http://localhost:5000/reset/${token}">link</a> to set a new password.</p>
+            <p>If YES, please click this <a href="${process.env.DOMAIN}/reset/${token}">link</a> to set a new password.</p>
             <p>If you did NOT request a password change, we strongly suggest that you change your current password ASAP.</p>
             <h5 style="color: firebrick">NOTE: The link will expire an hour from now.</h5>
             </section>
@@ -201,17 +201,21 @@ exports.postReset = async (req, res, next) => {
 
 exports.getNewPassword = async (req, res, next) => {
   const { token } = req.params;
+
+  console.log("TOKEN", token);
+
+  let message = req.flash("error");
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+
   try {
-    const user = User.findOne({
+    const user = await User.findOne({
       resetToken: token,
       resetTokenExpiration: { $gt: Date.now() },
     });
-    let message = req.flash("error");
-    if (message.length > 0) {
-      message = message[0];
-    } else {
-      message = null;
-    }
     res.render("auth/new-password", {
       path: "/new-password",
       pageTitle: "New Password",
@@ -229,9 +233,10 @@ exports.getNewPassword = async (req, res, next) => {
 exports.postNewPassword = async (req, res, next) => {
   const { newPassword, passwordToken, userId } = req.body;
 
-  try {
-    let resetUser;
+  console.log(req.body);
 
+  let resetUser;
+  try {
     const user = await User.findOne({
       resetToken: passwordToken,
       resetTokenExpiration: { $gt: Date.now() },
