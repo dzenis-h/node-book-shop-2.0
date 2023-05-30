@@ -1,5 +1,4 @@
-I see. Thank you for clarifying. I have updated the README file with the correct technologies. Here is the final version:
-
+##
 # MERN Shop :shopping_cart:
 
 MERN Shop is a full-stack e-commerce web app built with Node.js, Express.js, MongoDB, and EJS. It allows users to browse and buy products online, as well as manage their orders and profiles. It also has an admin panel for managing products, users, and orders.
